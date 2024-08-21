@@ -347,3 +347,4 @@ int main()
 	for (List<std::string>::Iterator it = s_list.begin(); it != s_list.end(); ++it)
 		cout << *it; cout << endl;
 }
+//
