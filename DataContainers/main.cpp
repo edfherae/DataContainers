@@ -296,7 +296,7 @@ ostream& operator<<(ostream& os, const Element& other)
 //#define COPY_METHODS_CHECK
 //#define INITIALIZER_LIST_CONSTRUCTOR
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
 
 int main()
 {
