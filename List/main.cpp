@@ -50,6 +50,9 @@ public:
 	}
 	~List()
 	{
+		//while (Head)pop_front();
+		while (Head)pop_back();
+		print();
 		cout << "LDestructor:\t" << this << endl;
 	}
 
@@ -183,29 +186,33 @@ public:
 	void pop_front()
 	{
 		if (Head == nullptr && Tail == nullptr)return;
-
-		Element* purgatory = Head;
-		if (size == 1)Head = Tail = nullptr;
+		if (Head == Tail)
+		{
+			delete Head;
+			Head = Tail = nullptr;
+		}
 		else
 		{
-			Head->pNext->pPrev = nullptr;
 			Head = Head->pNext;
+			delete Head->pNext;
+			Head->pPrev = nullptr;
 		}
-		delete purgatory;
 		size--;
 	}
 	void pop_back()
 	{
 		if (Head == nullptr && Tail == nullptr)return;
-
-		Element* purgatory = Tail;
-		if (size == 1)Head = Tail = nullptr;
+		if (Head == Tail)
+		{
+			delete Tail;
+			Head = Tail = nullptr;
+		}
 		else
 		{
-			Tail->pPrev->pNext = nullptr;
 			Tail = Tail->pPrev;
+			delete Tail->pNext;
+			Tail->pNext = nullptr;
 		}
-		delete purgatory;
 		size--;
 	}
 	void erase(int index)
@@ -225,7 +232,7 @@ public:
 			cout << Temp->pPrev << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Количество элементов в списке: " << size << endl;
 	}
-	void backwards_print()const
+	void reverse_print()const
 	{
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp->Data << tab << Temp->pNext << endl;
@@ -245,7 +252,7 @@ int main()
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	list.backwards_print();
+	list.reverse_print();
 
 	cout << delimiter << endl;
 
@@ -255,15 +262,16 @@ int main()
 		cout << list[i] << tab;
 	}
 	cout << endl;
-	list.backwards_print();
+	list.reverse_print();
 
 	cout << delimiter << endl;
 
 	//list.erase(2);
 	//list.print();
-	for (size_t i = 0; i < n; i++)
-	{
-		//list.pop_front();
-		list.pop_back();
-	}
+
+	//for (size_t i = 0; i < n; i++)
+	//{
+	//	//list.pop_front();
+	//	list.pop_back();
+	//}
 }
