@@ -3,7 +3,8 @@ using namespace std;
 #define tab "\t"
 #define delimiter "\n---------------------------------------------------------------------\n"
 
-//class ForwardList;
+template<typename T>class ForwardList;
+template<typename T>class Iterator;
 
 template<typename T>class Element
 {
@@ -32,15 +33,16 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
-	friend class Iterator;
-	friend class ForwardList;
+	friend class Iterator<T>;
+	friend class ForwardList<T>;
 
 };
 template<typename T>int Element<T>::count = 0;
 
+template<typename T>
 class Iterator
 {
-	template<typename T>Element<T>* Temp;
+	Element<T>* Temp;
 public:
 	Iterator(Element<T>* Temp = nullptr):Temp(Temp)
 	{
@@ -158,7 +160,7 @@ public:
 	}
 	T& operator[](int index)
 	{
-		Element* Temp = Head;
+		Element<T>* Temp = Head;
 		for (int i = 0; i < index; i++)
 			Temp = Temp->pNext;
 		return Temp->Data;
@@ -166,21 +168,21 @@ public:
 
 	//				Adding elements:
 
-	void push_front(int Data)
+	void push_front(T Data)
 	{
-		Head = new Element(Data, Head);
+		Head = new Element<T>(Data, Head);
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (Head == nullptr)return push_front(Data);
 
-		Element* Temp = Head;
+		Element<T>* Temp = Head;
 		while (Temp->pNext)Temp = Temp->pNext;
-		Temp->pNext = new Element(Data);
+		Temp->pNext = new Element<T>(Data);
 		size++;
 	}
-	void insert(int Data, int index)
+	void insert(T Data, int index)
 	{
 		if (index > size)cout << "Error: Out of range\n"; return;
 		if (index == 0)return push_front(Data);
@@ -197,7 +199,7 @@ public:
 	{
 		if (Head == nullptr)return;
 		//1) Запоминаем вдрес удаляемого элемента:
-		Element* purgatory = Head;
+		Element<T>* purgatory = Head;
 		//2) Исключаем удаляемый элемент из списка:
 		Head = Head->pNext;
 		//3)  Удаляем эоемент из памяти:
@@ -266,11 +268,11 @@ public:
 		//Element* Temp = Head; //Temp - это итератор
 							  //Итератор - указатель, при помощи которого можно получить доступ к элементам структуры данных
 		//while (Temp)
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		for (Element<T>* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 	}
-	Iterator begin()const { return Head; }
-	Iterator end()const { return nullptr; }
+	Iterator<T> begin()const { return Head; }
+	Iterator<T> end()const { return nullptr; }
 };
 
 template<typename T>ForwardList<T> operator+(const ForwardList<T>& left, const ForwardList<T>& right)
