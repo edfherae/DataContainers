@@ -5,16 +5,16 @@ using namespace std;
 
 //class ForwardList;
 
-class Element
+template<typename T>class Element
 {
-	int Data;			//значение элемента
+	T Data;			//значение элемента
 	Element* pNext;		//Pointer to Next - указатель на следующий элемент
 	static int count;
 public:
 	static int get_count() { return count; }
 	const int get_data()const { return Data; }
 
-	Element(int Data = 0, Element* pNext = nullptr) : Data(Data), pNext(pNext)
+	Element(T Data = 0, Element* pNext = nullptr) : Data(Data), pNext(pNext)
 	{
 		count++;
 		cout << "EConstructor:\t" << this << endl;
@@ -36,13 +36,13 @@ public:
 	friend class ForwardList;
 
 };
-int Element::count = 0;
+template<typename T>int Element<T>::count = 0;
 
 class Iterator
 {
-	Element* Temp;
+	template<typename T>Element<T>* Temp;
 public:
-	Iterator(Element* Temp = nullptr):Temp(Temp)
+	Iterator(Element<T>* Temp = nullptr):Temp(Temp)
 	{
 		cout << "IConstructor:\t" << this << endl;
 	}
@@ -83,9 +83,9 @@ public:
 	}
 };
 
-class ForwardList
+template<typename T>class ForwardList
 {
-	Element* Head; //Голова списка, указывает на начальный элемент списка
+	Element<T>* Head; //Голова списка, указывает на начальный элемент списка
 	unsigned int size;
 public:
 	int get_size()const { return size; }
@@ -112,9 +112,9 @@ public:
 		*this = std::move(other); //Функция std::move() принудительно вызывает MoveAssignment для класса.
 		cout << "MoveConstructor:\t" << this << endl;
 	}
-	ForwardList(const initializer_list<int>& il) : ForwardList()
+	ForwardList(const initializer_list<T>& il) : ForwardList()
 	{
-		for (const int* it = il.begin(); it != il.end(); it++) 
+		for (const T* it = il.begin(); it != il.end(); it++) 
 		{
 			//it - iterator
 			push_back(*it);
@@ -149,14 +149,14 @@ public:
 		other.~ForwardList();
 		cout << "MoveAssignment:\t" << this << endl;
 	}
-	int& operator[](int index)const
+	T& operator[](int index)const
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++)
 			Temp = Temp->pNext;
 		return Temp->Data;
 	}
-	int& operator[](int index)
+	T& operator[](int index)
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++)
@@ -269,23 +269,17 @@ public:
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 	}
-	Iterator begin()const
-	{
-		return Head;
-	}
-	Iterator end()const
-	{
-		return nullptr;
-	}
+	Iterator begin()const { return Head; }
+	Iterator end()const { return nullptr; }
 };
 
-ForwardList operator+(const ForwardList& left, const ForwardList& right)
+template<typename T>ForwardList<T> operator+(const ForwardList<T>& left, const ForwardList<T>& right)
 {
-	ForwardList buffer = left;
+	ForwardList<T> buffer = left;
 	for (int i = 0; i < right.get_size(); i++)buffer.push_back(right[i]);
 	return buffer;
 }
-ostream& operator<<(ostream& os, const Element& other)
+template<typename T>ostream& operator<<(ostream& os, const Element<T>& other)
 {
 	return os << other.get_data() << tab;
 }
@@ -432,4 +426,12 @@ int main()
 	}
 #endif // RANGE_BASED_FOR_LIST
 
+	ForwardList<int> i_list = { 1,2,3,4,5 };
+	i_list.print();
+	ForwardList<double> d_list = { 1.1,2.2,3.3,4.4,5.5 };
+	d_list.print();
+	ForwardList<string> s_list = {"to","the","moon"};
+	s_list.print();
+	//ForwardList<Element<int>> e_list = { Element<int>(1), Element<int>(2), Element<int>(2)};
+	//e_list.print();
 }
