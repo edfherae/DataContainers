@@ -3,6 +3,7 @@
 #include<vector>
 #include <list>
 #include <forward_list>
+#include <iterator>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -12,7 +13,7 @@ using std::endl;
 
 //#define STL_ARRAY
 //#define STL_VECTOR
-//#define STL_LIST
+#define STL_LIST
 
 template<typename T>void vector_properties(const std::vector<T>& vec);
 
@@ -124,6 +125,9 @@ void main()
 	cout << "Введите значение типа int: "; cin >> value;
 	cout << "Введите индекс вставки значения: "; cin >> index;
 	
+	//std::list<int>::iterator position = list.begin();
+	//std::advance(position, index);
+
 	std::list<int>::const_iterator it = list.begin();
 	for (int i = 0; i < index; i++)++it;
 	list.insert(it, value);
