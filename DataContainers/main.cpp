@@ -5,6 +5,7 @@ using namespace std;
 
 template<typename T>class ForwardList;
 template<typename T>class Iterator;
+template<typename T>class Stack;
 
 template<typename T>class Element
 {
@@ -33,9 +34,10 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
+	//можно просто дописать перед friend <typename T>
 	friend class Iterator<T>;
 	friend class ForwardList<T>;
-
+	friend class Stack<T>;
 };
 template<typename T>int Element<T>::count = 0;
 
@@ -87,6 +89,7 @@ public:
 
 template<typename T>class ForwardList
 {
+protected:
 	Element<T>* Head; //√олова списка, указывает на начальный элемент списка
 	unsigned int size;
 public:
@@ -286,6 +289,25 @@ template<typename T>ostream& operator<<(ostream& os, const Element<T>& other)
 	return os << other.get_data() << tab;
 }
 
+template<typename T>class Stack : ForwardList<T>
+{
+public:
+	void push(T data)
+	{
+		ForwardList<T>::push_front(data);
+	}
+	T pop()
+	{
+		T data = ForwardList<T>::Head->Data;
+		ForwardList<T>::pop_front();
+		return data;
+	}
+	unsigned int depth()
+	{
+		return ForwardList<T>::size;
+	}
+};
+
 //#define BASE_CHECK
 //#define COUNT_CHECK
 //#define SIZE_CONSTRUCTOR_CHECK
@@ -293,6 +315,7 @@ template<typename T>ostream& operator<<(ostream& os, const Element<T>& other)
 //#define INITIALIZER_LIST_CONSTRUCTOR
 //#define RANGE_BASED_FOR_ARRAY
 //#define RANGE_BASED_FOR_LIST
+//#define TEMPLATE_TYPES
 
 int main()
 {
@@ -428,12 +451,26 @@ int main()
 	}
 #endif // RANGE_BASED_FOR_LIST
 
+#ifdef TEMPLATE_TYPES
 	ForwardList<int> i_list = { 1,2,3,4,5 };
 	i_list.print();
 	ForwardList<double> d_list = { 1.1,2.2,3.3,4.4,5.5 };
 	d_list.print();
-	ForwardList<string> s_list = {"to","the","moon"};
+	ForwardList<string> s_list = { "to","the","moon" };
 	s_list.print();
 	//ForwardList<Element<int>> e_list = { Element<int>(1), Element<int>(2), Element<int>(2)};
-	//e_list.print();
+	//e_list.print();  
+#endif // TEMPLATE_TYPES
+
+	Stack<int> stack;
+	stack.push(1);
+	stack.push(2);
+	stack.push(5);
+	stack.push(8);
+	stack.push(13);
+
+	while (stack.depth())
+	{
+		cout << stack.pop() << tab;
+	}
 }
