@@ -3,6 +3,7 @@
 #include<map>
 #include<vector>
 #include<list>
+#include <fstream>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -134,4 +135,26 @@ void main()
 		}
 		cout << "\b\b." << endl;
 	}
+
+	///////////////////////////////////
+
+	std::ofstream fout;
+	fout.open("E:\\Пользователи\\Desktop\\academy\\source\\repos\\DataContainers\\AssociativeContainers\\GAI.txt", std::ios_base::out);
+	if (!fout.is_open())
+	{
+		cout << "File is not open!\n";
+	}
+	else
+	{
+		for (std::map<std::string, std::vector<std::string>>::iterator it = GAI.begin(); it != GAI.end(); ++it)
+		{
+			fout << it->first << ": ";
+			for (std::vector<std::string>::iterator jt = it->second.begin(); jt != it->second.end(); ++jt)
+			{
+				fout << *jt << ", ";
+			}
+			fout << "\b\b." << endl;
+		}
+	}
+	fout.close();
 }

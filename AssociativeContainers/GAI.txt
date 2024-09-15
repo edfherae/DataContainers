@@ -1,0 +1,3 @@
+1abc23: нет, нет, .
+1tst11: test, test, .
+hgf: hg, hg, .
